@@ -1,0 +1,9 @@
+pyyaml
+pandas
+-f https://download.pytorch.org/whl/cu113/torch_stable.html
+-f https://data.pyg.org/whl/torch-1.12.0+cu113.html
+torch==1.12.1+cu113
+torch-scatter==2.1.0
+torch-sparse==0.6.16
+torch-geometric
+torchvision==0.13.1
