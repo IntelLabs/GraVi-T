@@ -55,6 +55,7 @@ python data/annotations/merge_ava_activespeaker.py
 
 ### Features
 Download the features from [Google Drive](https://drive.google.com/drive/folders/1bX0cTHYLcBDc9ArmWps17F55goj3hgek?usp=share_link) and unzip under `data/features`.
+> We used the features from the thirdparty repositories. RESNET18-TSM-AUG and RESNET50-TSM-AUG are directly from [SPELL](https://github.com/SRA2/SPELL). SLOWFAST-64x2-R101 is obtained from using [SlowFast](https://github.com/facebookresearch/SlowFast).
 
 ### Directory Structure
 The data directories should look like as follows:
@@ -111,9 +112,8 @@ python tools/evaluate.py --exp_name SPELL_AL_default --eval_type AVA_AL
 ```
 
 ## Note
-- We used the official code of [Active Speakers in Context (ASC)](https://github.com/fuankarion/active-speakers-context) and [SlowFast](https://github.com/facebookresearch/SlowFast) to extract the features.
-- For RESNET18-TSM-AUG and RESNET50-TSM-AUG, we used `STE_train.py` and `STE_forward.py` of the ASC repository to train the two-stream ResNet-TSM encoders and extract the audio-visual features. Please refer to `models_stage1_tsm.py` and the checkpoints from this [link](https://drive.google.com/drive/folders/1oom1XLVv8yAR8TVEmepsQ9Yp0E0SIAXM?usp=sharing) to see how we implanted the TSM into the two-stream ResNets.
-- For SLOWFAST-64x2-R101, we used the pretrained checkpoint ([`SLOWFAST_64x2_R101_50_50.pkl`](https://dl.fbaipublicfiles.com/pyslowfast/model_zoo/ava/SLOWFAST_64x2_R101_50_50.pkl)) in [SlowFast Model Zoo](https://github.com/facebookresearch/SlowFast/blob/main/MODEL_ZOO.md).
+- For RESNET18-TSM-AUG and RESNET50-TSM-AUG, we used the same features used in [SPELL](https://github.com/SRA2/SPELL).
+- For SLOWFAST-64x2-R101, we used the official code of [SlowFast](https://github.com/facebookresearch/SlowFast). We used the pretrained checkpoint ([`SLOWFAST_64x2_R101_50_50.pkl`](https://dl.fbaipublicfiles.com/pyslowfast/model_zoo/ava/SLOWFAST_64x2_R101_50_50.pkl)) in [SlowFast Model Zoo](https://github.com/facebookresearch/SlowFast/blob/main/MODEL_ZOO.md).
 
 ## Contributor
 Graph-LTVU is written and maintained by [Kyle Min](https://sites.google.com/view/kylemin)
