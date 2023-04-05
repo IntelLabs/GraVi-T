@@ -33,19 +33,14 @@ cd Graph-LTVU
 pip3 install -e .
 ```
 
-## Data Preparation
+## Getting Started (Active Speaker Detection)
 ### Annotations
 1) Download the annotations from the official site:
 ```
 DATA_DIR="data/annotations"
 
 wget https://research.google.com/ava/download/ava_activespeaker_val_v1.0.tar.bz2 -P ${DATA_DIR}
-wget https://research.google.com/ava/download/ava_val_v2.2.csv.zip -P ${DATA_DIR}
-wget https://research.google.com/ava/download/ava_action_list_v2.2_for_activitynet_2019.pbtxt -P ${DATA_DIR}
-
 tar -xf ${DATA_DIR}/ava_activespeaker_val_v1.0.tar.bz2 -C ${DATA_DIR}
-unzip ${DATA_DIR}/ava_val_v2.2.csv.zip -d ${DATA_DIR}
-mv ${DATA_DIR}/research/action_recognition/ava/website/www/download/ava_val_v2.2.csv ${DATA_DIR}
 ```
 
 2) Preprocess the annotations:
@@ -54,8 +49,8 @@ python data/annotations/merge_ava_activespeaker.py
 ```
 
 ### Features
-Download the features from [Google Drive](https://drive.google.com/drive/folders/1bX0cTHYLcBDc9ArmWps17F55goj3hgek?usp=share_link) and unzip under `data/features`.
-> We used the features from the thirdparty repositories. RESNET18-TSM-AUG and RESNET50-TSM-AUG are directly from [SPELL](https://github.com/SRA2/SPELL). SLOWFAST-64x2-R101 is obtained from using [SlowFast](https://github.com/facebookresearch/SlowFast).
+Download the features from this [link](https://drive.google.com/uc?export=download&id=121csGw-T9OHoBOnrUbGYodH2464Dz1_T) and unzip under `data/features`.
+> We used the features from the thirdparty repositories. RESNET18-TSM-AUG is obtained from [SPELL](https://github.com/SRA2/SPELL).
 
 ### Directory Structure
 The data directories should look like as follows:
@@ -63,57 +58,38 @@ The data directories should look like as follows:
 |-- data
     |-- annotations
         |-- ava_activespeaker_val_v1.0.csv
-        |-- ava_val_v2.2.csv
-        |-- ava_action_list_v2.2_for_activitynet_2019.pbtxt
     |-- features
         |-- RESNET18-TSM-AUG
             |-- train
             |-- val
-        |-- RESNET50-TSM-AUG
-            |-- train
-            |-- val
-        |-- SLOWFAST-64x2-R101
-            |-- train
-            |-- val
 ```
 
-## Getting Started
+### Experiments
 We can perform the experiments on active speaker detection with the default configuration by following the three steps below.
 
-### Step 1: Graph Generation
+#### Step 1: Graph Generation
 Run the following command to generate spatial-temporal graphs from the features:
 ```
 python data/generate_graph.py --features RESNET18-TSM-AUG --ec_mode csi --time_span 90 --tau 0.9
 ```
 The generated graphs will be saved under `data/graphs`. Each graph captures long temporal context information in a video, which spans about 90 seconds (specified by `--time_span`).
 
-### Step 2: Training
+#### Step 2: Training
 Next, run the training script by passing the default configuration file:
 ```
 python tools/train_context_reasoning.py --cfg configs/active-speaker-detection/ava_active-speaker/SPELL_default.yaml
 ```
 The results and logs will be saved under `results`.
 
-### Step 3: Evaluation
+#### Step 3: Evaluation
 Now, we can evaluate the trained model's performance:
 ```
 python tools/evaluate.py --exp_name SPELL_ASD_default --eval_type AVA_ASD
 ```
 This will print the evaluation score.
 
-In a similar way, we can perform the experiments on the task of action localization with the default configuration:
-```
-# Step 1
-python data/generate_graph.py --features SLOWFAST-64x2-R101 --ec_mode cdi --time_span 90 --tau 3
-# Step 2
-python tools/train_context_reasoning.py --cfg configs/action-localization/ava_actions/SPELL_default.yaml
-# Step 3
-python tools/evaluate.py --exp_name SPELL_AL_default --eval_type AVA_AL
-```
-
-## Note
-- For RESNET18-TSM-AUG and RESNET50-TSM-AUG, we used the same features used in [SPELL](https://github.com/SRA2/SPELL).
-- For SLOWFAST-64x2-R101, we used the official code of [SlowFast](https://github.com/facebookresearch/SlowFast). We used the pretrained checkpoint ([`SLOWFAST_64x2_R101_50_50.pkl`](https://dl.fbaipublicfiles.com/pyslowfast/model_zoo/ava/SLOWFAST_64x2_R101_50_50.pkl)) in [SlowFast Model Zoo](https://github.com/facebookresearch/SlowFast/blob/main/MODEL_ZOO.md).
+## Getting Started (Action Localization)
+Please refer to the instructions in [GETTING_STARTED_AL.md](docs/GETTING_STARTED_AL.md).
 
 ## Contributor
 Graph-LTVU is written and maintained by [Kyle Min](https://sites.google.com/view/kylemin)
