@@ -12,8 +12,8 @@ mv ${DATA_DIR}/research/action_recognition/ava/website/www/download/ava_val_v2.2
 ```
 
 ### Features
-Download the features from this [link](https://drive.google.com/uc?export=download&id=1DT4skF4DMuU7Cl2urrYRwO79A9ZOnYLY) and unzip under `data/features`.
-> SLOWFAST-64x2-R101 is obtained from using the official code of [SlowFast](https://github.com/facebookresearch/SlowFast). We used the pretrained checkpoint ([SLOWFAST_64x2_R101_50_50.pkl](https://dl.fbaipublicfiles.com/pyslowfast/model_zoo/ava/SLOWFAST_64x2_R101_50_50.pkl)) in [SlowFast Model Zoo](https://github.com/facebookresearch/SlowFast/blob/main/MODEL_ZOO.md).
+Download `SLOWFAST-64x2-R101.zip` from the Google Drive link from [SPELL](https://github.com/SRA2/SPELL#code-usage) and unzip under `data/features`.
+> We use the features from the thirdparty repositories. SLOWFAST-64x2-R101 is obtained by using the official code of [SlowFast](https://github.com/facebookresearch/SlowFast) with the pretrained checkpoint ([SLOWFAST_64x2_R101_50_50.pkl](https://dl.fbaipublicfiles.com/pyslowfast/model_zoo/ava/SLOWFAST_64x2_R101_50_50.pkl)) in [SlowFast Model Zoo](https://github.com/facebookresearch/SlowFast/blob/main/MODEL_ZOO.md).
 
 ### Directory Structure
 The data directories should look like as follows:

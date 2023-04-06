@@ -49,8 +49,8 @@ python data/annotations/merge_ava_activespeaker.py
 ```
 
 ### Features
-Download the features from this [link](https://drive.google.com/uc?export=download&id=121csGw-T9OHoBOnrUbGYodH2464Dz1_T) and unzip under `data/features`.
-> We used the features from the thirdparty repositories. RESNET18-TSM-AUG is obtained from [SPELL](https://github.com/SRA2/SPELL).
+Download `RESNET18-TSM-AUG.zip` from the Google Drive link from [SPELL](https://github.com/SRA2/SPELL#code-usage) and unzip under `data/features`.
+> We use the features from the thirdparty repositories.
 
 ### Directory Structure
 The data directories should look like as follows:
