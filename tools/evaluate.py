@@ -3,12 +3,12 @@ import yaml
 import torch
 import argparse
 from torch_geometric.loader import DataLoader
-from graphltvu.utils.parser import get_cfg
-from graphltvu.utils.logger import get_logger
-from graphltvu.models import build_model
-from graphltvu.datasets import GraphDataset
-from graphltvu.utils.formatter import get_formatting_data_dict, get_formatted_preds
-from graphltvu.utils.eval_tool import get_eval_score
+from gravit.utils.parser import get_cfg
+from gravit.utils.logger import get_logger
+from gravit.models import build_model
+from gravit.datasets import GraphDataset
+from gravit.utils.formatter import get_formatting_data_dict, get_formatted_preds
+from gravit.utils.eval_tool import get_eval_score
 
 
 def evaluate(cfg):

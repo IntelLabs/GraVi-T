@@ -1,9 +1,9 @@
-# Graph-LTVU
-This repository contains an open-source codebase for graph-based long-term video understanding (Graph-LTVU). It is designed to serve as a spatial-temporal graph learning framework for multiple video understanding tasks. In the current version, it supports training and evaluating one of the state-of-the-art models, [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf), for the tasks of active speaker detection and action localization.
+# GraVi-T
+This repository contains an open-source codebase for Graph-based long-term Video undersTanding (GraVi-T). It is designed to serve as a spatial-temporal graph learning framework for multiple video understanding tasks. In the current version, it supports training and evaluating one of the state-of-the-art models, [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf), for the tasks of active speaker detection and action localization.
 
 In the near future, we will release more advanced graph-based approaches for other tasks, including action segmentation and the [Ego4D challenge](https://ego4d-data.org/workshops/eccv22).
 
-![](docs/images/graphltvu_teaser.jpg?raw=true)
+![](docs/images/gravit_teaser.jpg?raw=true)
 
 ## Use Cases and Performance
 |  Model  |         Dataset         |            Task           |     validation mAP (%)     |
@@ -28,8 +28,8 @@ Alternatively, you can manually install PyYAML, pandas, and [PyG](https://www.py
 ## Installation
 After confirming the above requirements are met, run the following commands:
 ```
-https://github.com/IntelLabs/Graph-LTVU
-cd Graph-LTVU
+git clone https://github.com/IntelLabs/GraVi-T.git
+cd GraVi-T
 pip3 install -e .
 ```
 
@@ -92,7 +92,7 @@ This will print the evaluation score.
 Please refer to the instructions in [GETTING_STARTED_AL.md](docs/GETTING_STARTED_AL.md).
 
 ## Contributor
-Graph-LTVU is written and maintained by [Kyle Min](https://sites.google.com/view/kylemin)
+GraVi-T is written and maintained by [Kyle Min](https://sites.google.com/view/kylemin)
 
 ## Citation
 ECCV 2022 paper:

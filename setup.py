@@ -4,9 +4,9 @@ with open('README.md', 'r') as f:
     long_description = f.read()
 
 setup(
-    name='graphltvu',
+    name='gravit',
     version='1.0.0',
-    description='A graph learning framework for long-term video understanding',
+    description='Graph learning framework for long-term Video undersTanding',
     long_description=long_description,
     license='Apache License 2.0',
     author='Kyle Min',

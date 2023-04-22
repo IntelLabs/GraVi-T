@@ -16,7 +16,7 @@ def get_formatting_data_dict(root_data, graph_name, sp='val'):
     data_dict = {}
     for data_file in list_data_files:
         video_id = os.path.splitext(os.path.basename(data_file))[0]
-        
+
         with open(data_file, 'rb') as f:
             data = pickle.load(f) #nosec
 

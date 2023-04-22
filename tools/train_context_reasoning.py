@@ -3,10 +3,10 @@ import yaml
 import torch
 import torch.optim as optim
 from torch_geometric.loader import DataLoader
-from graphltvu.utils.parser import get_args, get_cfg
-from graphltvu.utils.logger import get_logger
-from graphltvu.models import build_model, get_loss_func
-from graphltvu.datasets import GraphDataset
+from gravit.utils.parser import get_args, get_cfg
+from gravit.utils.logger import get_logger
+from gravit.models import build_model, get_loss_func
+from gravit.datasets import GraphDataset
 
 
 def train(cfg):
