@@ -1,7 +1,7 @@
 # GraVi-T
 This repository contains an open-source codebase for Graph-based long-term Video undersTanding (GraVi-T). It is designed to serve as a spatial-temporal graph learning framework for multiple video understanding tasks. In the current version, it supports training and evaluating one of the state-of-the-art models, [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf), for the tasks of active speaker detection and action localization.
 
-In the near future, we will release more advanced graph-based approaches for other tasks, including action segmentation and the [Ego4D challenge](https://ego4d-data.org/workshops/eccv22).
+In the near future, we will release more advanced graph-based approaches for other tasks, including action segmentation and audio-visual diarization. We also want to note that our method has recently won many challenges, including the Ego4D challenges [@ECCV22](https://ego4d-data.org/workshops/eccv22/), [@CVPR23](https://ego4d-data.org/workshops/cvpr23/) and ActivityNet [@CVPR22](https://research.google.com/ava/challenge.html).
 
 ![](docs/images/gravit_teaser.jpg?raw=true)
 
