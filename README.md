@@ -16,9 +16,9 @@ In the near future, we will release more advanced graph-based approaches for oth
 ## Requirements
 Preliminary requirements:
 - Python>=3.7
-- CUDA 11.3
+- CUDA 11.6
 
-Run the following command if you have CUDA 11.3:
+Run the following command if you have CUDA 11.6:
 ```
 pip3 install -r requirements.txt
 ```
