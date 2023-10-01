@@ -108,7 +108,7 @@ Please refer to the instructions in [GETTING_STARTED_AL.md](docs/GETTING_STARTED
 Please refer to the instructions in [GETTING_STARTED_AS.md](docs/GETTING_STARTED_AS.md).
 
 ## Contributor
-GraVi-T is written and maintained by [Kyle Min](https://sites.google.com/view/kylemin)
+GraVi-T is written and maintained by [Kyle Min](https://github.com/kylemin) (from version 1.0.0 to 1.1.0). Please contact me if you want to become a contributor to this library.
 
 ## Citation
 ECCV 2022 paper:
@@ -130,6 +130,16 @@ Technical report for Ego4D challenge 2022:
   author={Min, Kyle},
   journal={arXiv preprint arXiv:2210.07764},
   year={2022}
+}
+```
+
+Technical report for Ego4D challenge 2023:
+```bibtex
+@article{min2023sthg,
+  title={STHG: Spatial-Temporal Heterogeneous Graph Learning for Advanced Audio-Visual Diarization},
+  author={Min, Kyle},
+  journal={arXiv preprint arXiv:2306.10608},
+  year={2023}
 }
 ```
 
