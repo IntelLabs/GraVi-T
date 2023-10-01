@@ -338,20 +338,101 @@ def run_evaluation_al(detections, groundtruth, labelmap):
   return metrics['PascalBoxes_Precision/mAP@0.5IOU']
 
 
-def get_eval_score(root_data, eval_type, preds):
-  """
-  Compute the evaluation score
-  """
+def get_class_start_end_times(result):
+    """
+    Return the classes and their corresponding start and end times
+    """
+    last_class = result[0]
+    classes = [last_class]
+    starts = [0]
+    ends = []
 
-  # Path to the annotations
-  path_annts = os.path.join(root_data, 'annotations')
+    for i, c in enumerate(result):
+        if c != last_class:
+            classes.append(c)
+            starts.append(i)
+            ends.append(i)
+            last_class = c
 
-  if eval_type == 'AVA_ASD':
-    groundtruth = os.path.join(path_annts, 'ava_activespeaker_val_v1.0.csv')
-    score = run_evaluation_asd(preds, groundtruth)
-  elif eval_type == 'AVA_AL':
-    groundtruth = os.path.join(path_annts, 'ava_val_v2.2.csv')
-    labelmap = os.path.join(path_annts, 'ava_action_list_v2.2_for_activitynet_2019.pbtxt')
-    score = run_evaluation_al(preds, groundtruth, labelmap)
+    ends.append(len(result)-1)
 
-  return score*100.
+    return classes, starts, ends
+
+
+def compare_segmentation(pred, label, th):
+    """
+    Temporally compare the predicted and ground-truth segmentations
+    """
+
+    pc, ps, pe = get_class_start_end_times(pred)
+    lc, ls, le = get_class_start_end_times(label)
+
+    tp = 0
+    fp = 0
+    matched = [0]*len(lc)
+    for i in range(len(pc)):
+        inter = np.minimum(pe[i], le) - np.maximum(ps[i], ls)
+        union = np.maximum(pe[i], le) - np.minimum(ps[i], ls)
+        IoU = (inter/union) * [pc[i] == lc[j] for j in range(len(lc))]
+
+        best_idx = np.array(IoU).argmax()
+        if IoU[best_idx] >= th and not matched[best_idx]:
+            tp += 1
+            matched[best_idx] = 1
+        else:
+            fp += 1
+
+    fn = len(lc) - sum(matched)
+
+    return tp, fp, fn
+
+
+def get_eval_score(cfg, preds):
+    """
+    Compute the evaluation score
+    """
+
+    # Path to the annotations
+    path_annts = os.path.join(cfg['root_data'], 'annotations')
+
+    eval_type = cfg['eval_type']
+    if eval_type == 'AVA_ASD':
+        groundtruth = os.path.join(path_annts, 'ava_activespeaker_val_v1.0.csv')
+        score = run_evaluation_asd(preds, groundtruth)
+        str_score = f'{score*100:.2f}%'
+    elif eval_type == 'AVA_AL':
+        groundtruth = os.path.join(path_annts, 'ava_val_v2.2.csv')
+        labelmap = os.path.join(path_annts, 'ava_action_list_v2.2_for_activitynet_2019.pbtxt')
+        score = run_evaluation_al(preds, groundtruth, labelmap)
+        str_score = f'{score*100:.2f}%'
+    elif eval_type == 'AS':
+        total = 0
+        correct = 0
+        threshold = [0.1, 0.25, 0.5]
+        tp, fp, fn = [0]*len(threshold), [0]*len(threshold), [0]*len(threshold)
+
+        for video_id, pred in preds:
+            # Get a list of ground-truth action labels
+            with open(os.path.join(path_annts, f'{cfg["dataset"]}/groundTruth/{video_id}.txt')) as f:
+                label = [line.strip() for line in f]
+
+            total += len(label)
+            for i, lb in enumerate(label):
+                if pred[i] == lb:
+                    correct += 1
+
+            for i, th in enumerate(threshold):
+                tp_, fp_, fn_ = compare_segmentation(pred, label, th)
+                tp[i] += tp_
+                fp[i] += fp_
+                fn[i] += fn_
+
+        acc = correct/total
+        str_score = f'(Acc) {acc*100:.2f}%'
+        for i, th in enumerate(threshold):
+            pre = tp[i] / (tp[i]+fp[i])
+            rec = tp[i] / (tp[i]+fn[i])
+            f1 = np.nan_to_num(2*pre*rec / (pre+rec))
+            str_score += f', (F1@{th}) {f1*100:.2f}%'
+
+    return str_score

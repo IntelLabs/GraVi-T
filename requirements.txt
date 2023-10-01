@@ -1,5 +1,6 @@
 pyyaml
 pandas
+scikit-learn
 -f https://download.pytorch.org/whl/cu116/torch_stable.html
 -f https://data.pyg.org/whl/torch-1.13.1+cu116.html
 torch==1.13.1+cu116

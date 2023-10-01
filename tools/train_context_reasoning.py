@@ -16,6 +16,8 @@ def train(cfg):
 
     # Input and output paths
     path_graphs = os.path.join(cfg['root_data'], f'graphs/{cfg["graph_name"]}')
+    if cfg['split'] is not None:
+        path_graphs = os.path.join(path_graphs, f'split{cfg["split"]}')
     path_result = os.path.join(cfg['root_result'], f'{cfg["exp_name"]}')
     os.makedirs(path_result, exist_ok=True)
 
@@ -24,7 +26,7 @@ def train(cfg):
     logger.info(cfg['exp_name'])
     logger.info('Saving the configuration file')
     with open(os.path.join(path_result, 'cfg.yaml'), 'w') as f:
-        yaml.dump(cfg, f, default_flow_style=False, sort_keys=False)
+        yaml.dump({k: v for k, v in cfg.items() if v is not None}, f, default_flow_style=False, sort_keys=False)
 
     # Build a model and prepare the data loaders
     logger.info('Preparing a model and data loaders')
@@ -34,7 +36,8 @@ def train(cfg):
     val_loader = DataLoader(GraphDataset(os.path.join(path_graphs, 'val')))
 
     # Prepare the experiment
-    loss_func = get_loss_func(cfg['loss_name'])
+    loss_func = get_loss_func(cfg)
+    loss_func_val = get_loss_func(cfg, 'val')
     optimizer = optim.Adam(model.parameters(), lr=cfg['lr'], weight_decay=cfg['wd'])
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=cfg['sch_param'])
 
@@ -50,11 +53,14 @@ def train(cfg):
         for data in train_loader:
             optimizer.zero_grad()
 
-            x, c, y = data.x.to(device), data.c.to(device), data.y.to(device)
+            x, y = data.x.to(device), data.y.to(device)
             edge_index = data.edge_index.to(device)
             edge_attr = data.edge_attr.to(device)
+            c = None
+            if cfg['use_spf']:
+                c = data.c.to(device)
 
-            logits = model(x, c, edge_index, edge_attr)
+            logits = model(x, edge_index, edge_attr, c)
 
             loss = loss_func(logits, y)
             loss.backward()
@@ -67,7 +73,7 @@ def train(cfg):
         loss_train = loss_sum / len(train_loader)
 
         # Get the validation loss
-        loss_val = val(val_loader, model, device, loss_func)
+        loss_val = val(val_loader, cfg['use_spf'], model, device, loss_func_val)
 
         # Save the best-performing checkpoint
         if loss_val < min_loss_val:
@@ -81,7 +87,7 @@ def train(cfg):
     logger.info('Training finished')
 
 
-def val(val_loader, model, device, loss_func):
+def val(val_loader, use_spf, model, device, loss_func):
     """
     Run a single validation process
     """
@@ -90,11 +96,14 @@ def val(val_loader, model, device, loss_func):
     loss_sum = 0
     with torch.no_grad():
         for data in val_loader:
-            x, c, y = data.x.to(device), data.c.to(device), data.y.to(device)
+            x, y = data.x.to(device), data.y.to(device)
             edge_index = data.edge_index.to(device)
             edge_attr = data.edge_attr.to(device)
+            c = None
+            if use_spf:
+                c = data.c.to(device)
 
-            logits = model(x, c, edge_index, edge_attr)
+            logits = model(x, edge_index, edge_attr, c)
             loss = loss_func(logits, y)
             loss_sum += loss.item()
 

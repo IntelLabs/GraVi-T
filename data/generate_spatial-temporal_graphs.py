@@ -35,7 +35,7 @@ def _get_time_windows(list_fts, time_span):
     return twd_all
 
 
-def generate_graph(data_file, path_graphs, sp):
+def generate_graph(data_file, args, path_graphs, sp):
     """
     Generate graphs of a single video
     Time span of each graph is not greater than "time_span"
@@ -114,7 +114,7 @@ def generate_graph(data_file, path_graphs, sp):
 
 if __name__ == "__main__":
     """
-    Generate graphs from the extracted features
+    Generate spatial-temporal graphs from the extracted features
     """
 
     parser = argparse.ArgumentParser()
@@ -129,7 +129,6 @@ if __name__ == "__main__":
     parser.add_argument('--time_span',     type=float, help='Maximum time span for each graph in seconds', required=True)
     parser.add_argument('--tau',           type=float, help='Maximum time difference between neighboring nodes in seconds', required=True)
 
-    global args
     args = parser.parse_args()
 
     # Iterate over train/val splits
@@ -141,6 +140,6 @@ if __name__ == "__main__":
         list_data_files = sorted(glob.glob(os.path.join(args.root_data, f'features/{args.features}/{sp}/*.pkl')))
 
         with Pool(processes=20) as pool:
-            num_graph = pool.map(partial(generate_graph, path_graphs=path_graphs, sp=sp), list_data_files)
+            num_graph = pool.map(partial(generate_graph, args=args, path_graphs=path_graphs, sp=sp), list_data_files)
 
         print (f'Graph generation for {sp} is finished (number of graphs: {sum(num_graph)})')

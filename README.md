@@ -1,17 +1,30 @@
 # GraVi-T
-This repository contains an open-source codebase for Graph-based long-term Video undersTanding (GraVi-T). It is designed to serve as a spatial-temporal graph learning framework for multiple video understanding tasks. In the current version, it supports training and evaluating one of the state-of-the-art models, [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf), for the tasks of active speaker detection and action localization.
+This repository contains an open-source codebase for Graph-based long-term Video undersTanding (GraVi-T). It is designed to serve as a spatial-temporal graph learning framework for multiple video understanding tasks. In the current version, it supports training and evaluating one of the state-of-the-art models, [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf), for the tasks of active speaker detection, action localization, and action segmentation.
 
-In the near future, we will release more advanced graph-based approaches for other tasks, including action segmentation and audio-visual diarization. We also want to note that our method has recently won many challenges, including the Ego4D challenges [@ECCV22](https://ego4d-data.org/workshops/eccv22/), [@CVPR23](https://ego4d-data.org/workshops/cvpr23/) and ActivityNet [@CVPR22](https://research.google.com/ava/challenge.html).
+In the near future, we will release more advanced graph-based approaches for other tasks, including video summarization and audio-visual diarization. We also want to note that our method has recently won many challenges, including the Ego4D challenges [@ECCV22](https://ego4d-data.org/workshops/eccv22/), [@CVPR23](https://ego4d-data.org/workshops/cvpr23/) and ActivityNet [@CVPR22](https://research.google.com/ava/challenge.html).
 
 ![](docs/images/gravit_teaser.jpg?raw=true)
 
 ## Use Cases and Performance
-|  Model  |         Dataset         |            Task           |     validation mAP (%)     |
-|:--------|:-----------------------:|:-------------------------:|:--------------------------:|
-|  SPELL  |  AVA-ActiveSpeaker v1.0 |  Active Speaker Detection |   **94.2** (up from 88.0)  |
-|  SPELL+ |  AVA-ActiveSpeaker v1.0 |  Action Speaker Detection |   **94.9** (up from 89.3)  |
-|  SPELL  |  AVA-Actions v2.2       |  Action Localization      |   **36.8** (up from 29.4)  |
+### Active Speaker Detection (Dataset: AVA-ActiveSpeaker v1.0)
+|  Model  |      Feature       |     validation mAP (%)     |
+|:--------|:------------------:|:--------------------------:|
+|  SPELL  |  RESNET18-TSM-AUG  |   **94.2** (up from 88.0)  |
+|  SPELL  |  RESNET50-TSM-AUG  |   **94.9** (up from 89.3)  |
 > Numbers in parentheses indicate the mAP scores without using the suggested graph learning method.
+
+### Action Localization (Dataset: AVA-Actions v2.2)
+|  Model  |         Feature        |     validation mAP (%)     |
+|:--------|:----------------------:|:--------------------------:|
+|  SPELL  |   SLOWFAST-64x2-R101   |   **36.8** (up from 29.4)  |
+> Number in parentheses indicates the mAP score without using the suggested graph learning method.
+
+### Action Segmentation (Dataset: 50Salads - split2)
+|  Model  |   Feature    |         F1@0.1 (%)        |           Acc (%)         |
+|:--------|:------------:|:-------------------------:|:-------------------------:|
+|  SPELL  |   MSTCN++    |  **84.7** (up from 83.4)  |  **85.0** (up from 84.6)  |
+|  SPELL  |   ASFORMER   |  **89.8** (up from 86.1)  |  **88.2** (up from 87.8)  |
+> Numbers in parentheses indicate the scores without using the suggested graph learning method.
 
 ## Requirements
 Preliminary requirements:
@@ -26,7 +39,7 @@ pip3 install -r requirements.txt
 Alternatively, you can manually install PyYAML, pandas, and [PyG](https://www.pyg.org)>=2.0.3 with CUDA>=11.1
 
 ## Installation
-After confirming the above requirements are met, run the following commands:
+After confirming the above requirements, run the following commands:
 ```
 git clone https://github.com/IntelLabs/GraVi-T.git
 cd GraVi-T
@@ -35,7 +48,7 @@ pip3 install -e .
 
 ## Getting Started (Active Speaker Detection)
 ### Annotations
-1) Download the annotations from the official site:
+1) Download the annotations of AVA-ActiveSpeaker from the official site:
 ```
 DATA_DIR="data/annotations"
 
@@ -53,7 +66,7 @@ Download `RESNET18-TSM-AUG.zip` from the Google Drive link from [SPELL](https://
 > We use the features from the thirdparty repositories.
 
 ### Directory Structure
-The data directories should look like as follows:
+The data directories should look as follows:
 ```
 |-- data
     |-- annotations
@@ -70,7 +83,7 @@ We can perform the experiments on active speaker detection with the default conf
 #### Step 1: Graph Generation
 Run the following command to generate spatial-temporal graphs from the features:
 ```
-python data/generate_graph.py --features RESNET18-TSM-AUG --ec_mode csi --time_span 90 --tau 0.9
+python data/generate_spatial-temporal_graphs.py --features RESNET18-TSM-AUG --ec_mode csi --time_span 90 --tau 0.9
 ```
 The generated graphs will be saved under `data/graphs`. Each graph captures long temporal context information in a video, which spans about 90 seconds (specified by `--time_span`).
 
@@ -90,6 +103,9 @@ This will print the evaluation score.
 
 ## Getting Started (Action Localization)
 Please refer to the instructions in [GETTING_STARTED_AL.md](docs/GETTING_STARTED_AL.md).
+
+## Getting Started (Action Segmentation)
+Please refer to the instructions in [GETTING_STARTED_AS.md](docs/GETTING_STARTED_AS.md).
 
 ## Contributor
 GraVi-T is written and maintained by [Kyle Min](https://sites.google.com/view/kylemin)
@@ -121,7 +137,7 @@ Technical report for Ego4D challenge 2022:
 
 > This “research quality code”  is for Non-Commercial purposes and provided by Intel “As Is” without any express or implied warranty of any kind. Please see the dataset's applicable license for terms and conditions. Intel does not own the rights to this data set and does not confer any rights to it. Intel does not warrant or assume responsibility for the accuracy or completeness of any information, text, graphics, links or other items within the code. A thorough security review has not been performed on this code. Additionally, this repository may contain components that are out of date or contain known security vulnerabilities.
 
-> AVA-ActiveSpeaker, AVA-Actions: Please see the dataset's applicable license for terms and conditions. Intel does not own the rights to this data set and does not confer any rights to it.
+> AVA-ActiveSpeaker, AVA-Actions, 50Salads: Please see the dataset's applicable license for terms and conditions. Intel does not own the rights to this data set and does not confer any rights to it.
 
 ## Datasets & Models Disclaimer
 

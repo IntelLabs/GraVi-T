@@ -2,11 +2,14 @@ exp_name: SPELL_ASD_default
 model_name: SPELL
 graph_name: RESNET18-TSM-AUG_csi_90.0_0.9
 loss_name: bce_logit
+use_spf: True
+use_ref: False
 num_modality: 2
 channel1: 64
 channel2: 16
 proj_dim: 64
 final_dim: 1
+num_att_heads: 0
 dropout: 0.2
 lr: 0.0005
 wd: 0

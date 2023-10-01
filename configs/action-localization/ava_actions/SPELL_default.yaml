@@ -2,11 +2,14 @@ exp_name: SPELL_AL_default
 model_name: SPELL
 graph_name: SLOWFAST-64x2-R101_cdi_90.0_3.0
 loss_name: bce_logit
+use_spf: True
+use_ref: False
 num_modality: 1
 channel1: 1024
 channel2: 512
 proj_dim: 64
 final_dim: 80
+num_att_heads: 0
 dropout: 0.2
 lr: 0.0005
 wd: 0.0001

@@ -24,17 +24,23 @@ def get_args():
     parser.add_argument('--loss_name',     type=str,   help='Name of the loss function')
 
     # Other hyper-parameters
+    parser.add_argument('--use_spf',       type=bool,  help='Whether to use the spatial features')
+    parser.add_argument('--use_ref',       type=bool,  help='Whether to use the iterative refinement')
+    parser.add_argument('--w_ref',         type=float, help='Weight for the iterative refinement')
     parser.add_argument('--num_modality',  type=int,   help='Number of input modalities')
     parser.add_argument('--channel1',      type=int,   help='Filter dimension of the first GCN layers')
     parser.add_argument('--channel2',      type=int,   help='Filter dimension of the rest GCN layers')
     parser.add_argument('--proj_dim',      type=int,   help='Dimension of the projected spatial feature')
     parser.add_argument('--final_dim',     type=int,   help='Dimension of the final output')
+    parser.add_argument('--num_att_heads', type=int,   help='Number of attention heads of GATv2')
     parser.add_argument('--dropout',       type=float, help='Dropout for the last GCN layers')
     parser.add_argument('--lr',            type=float, help='Initial learning rate')
     parser.add_argument('--wd',            type=float, help='Weight decay value for regularization')
     parser.add_argument('--batch_size',    type=int,   help='Batch size during the training process')
     parser.add_argument('--sch_param',     type=int,   help='Parameter for lr_scheduler')
     parser.add_argument('--num_epoch',     type=int,   help='Total number of epochs')
+    parser.add_argument('--sample_rate',   type=int,   help='Downsampling rate for the input')
+    parser.add_argument('--split',         type=int,   help='Which fold to use for cross-validation')
 
     return parser.parse_args()
 
@@ -49,10 +55,9 @@ def get_cfg(args):
         delattr(args, 'cfg')
 
     for k, v in vars(args).items():
-        if v is None:
-            if k not in cfg:
-                raise ValueError(f'Please specify "{k}" in your command-line arguments or in the configuration file')
-        else:
-            cfg[k] = v
+        if v is None and k in cfg:
+            continue
+
+        cfg[k] = v
 
     return cfg
