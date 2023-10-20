@@ -44,6 +44,6 @@ The results and logs will be saved under `results`.
 #### Step 3: Evaluation
 Now, we can evaluate the trained model's performance:
 ```
-python tools/evaluate.py --exp_name SPELL_AS_default --eval_type AS
+python tools/evaluate.py --dataset 50salads --exp_name SPELL_AS_default --eval_type AS
 ```
 This will print the evaluation scores.
