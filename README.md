@@ -1,9 +1,22 @@
 # GraVi-T
 This repository contains an open-source codebase for Graph-based long-term Video undersTanding (GraVi-T). It is designed to serve as a spatial-temporal graph learning framework for multiple video understanding tasks. In the current version, it supports training and evaluating one of the state-of-the-art models, [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf), for the tasks of active speaker detection, action localization, and action segmentation.
 
-In the near future, we will release more advanced graph-based approaches for other tasks, including video summarization and audio-visual diarization. We also want to note that our method has recently won many challenges, including the Ego4D challenges [@ECCV22](https://ego4d-data.org/workshops/eccv22/), [@CVPR23](https://ego4d-data.org/workshops/cvpr23/) and ActivityNet [@CVPR22](https://research.google.com/ava/challenge.html).
+In the near future, we will release more advanced graph-based approaches (e.g. [STHG](https://arxiv.org/abs/2306.10608)) for other tasks, including video summarization and audio-visual diarization.
 
 ![](docs/images/gravit_teaser.jpg?raw=true)
+
+## Ego4D Challenges and ActivityNet
+We want to note that our method has recently won many challenges, including the Ego4D challenges [@ECCV22](https://ego4d-data.org/workshops/eccv22/), [@CVPR23](https://ego4d-data.org/workshops/cvpr23/) and ActivityNet [@CVPR22](https://research.google.com/ava/challenge.html). We summarize ASD (active speaker detection) and AVD (audio-visual diarization) performance comparisons on the validation set of the Ego4D dataset:
+|  ASD Model  |  ASD mAP(%)&#8593;  |  ASD mAP@0.5(%)&#8593;  | AVD DER(%)&#8595;  |
+|:------------|:-------------------:|:-----------------------:|:------------------:|
+|  RegionCls  |   -                 |  24.6                   |  80.0              |
+|  TalkNet    |   -                 |  50.6                   |  79.3              |
+|  [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf)      |   71.3  |  60.7  |  66.6  |
+|  [STHG](https://arxiv.org/abs/2306.10608)  |   **75.7**   |  **63.7**  |  **59.4**  |
+
+:bulb:In this table, We report two metrics to evaluate ASD performance: mAP quantifies the ASD results by assuming that the face bound-box detections are the ground truth (i.e. assuming the perfect face detector), whereas mAP@0.5 quantifies the ASD results on the detected face bounding boxes (i.e. a face detection is considered positive only if the IoU between a detected face bounding box and the ground-truth exceeds 0.5). For AVD, we report DER (diarization error rate): a lower DER value indicates a better AVD performance. For more information, please refer to our technical reports for the challenge.
+
+:bulb:We computed mAP@0.5 by using [Ego4D's official evaluation tool](https://github.com/EGO4D/audio-visual/tree/main/active-speaker-detection/active_speaker/active_speaker_evaluation)
 
 ## Use Cases and Performance
 ### Active Speaker Detection (Dataset: AVA-ActiveSpeaker v1.0)
