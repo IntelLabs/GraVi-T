@@ -11,8 +11,8 @@ We want to note that our method has recently won many challenges, including the 
 |:------------|:-------------------:|:-----------------------:|:------------------:|
 |  RegionCls  |   -                 |  24.6                   |  80.0              |
 |  TalkNet    |   -                 |  50.6                   |  79.3              |
-|  [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf)      |   71.3  |  60.7  |  66.6  |
-|  [STHG](https://arxiv.org/abs/2306.10608)  |   **75.7**   |  **63.7**  |  **59.4**  |
+|  [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf) (Ours)      |   71.3  |  60.7  |  66.6  |
+|  [STHG](https://arxiv.org/abs/2306.10608) (Ours)  |   **75.7**   |  **63.7**  |  **59.4**  |
 
 :bulb:In this table, We report two metrics to evaluate ASD performance: mAP quantifies the ASD results by assuming that the face bound-box detections are the ground truth (i.e. assuming the perfect face detector), whereas mAP@0.5 quantifies the ASD results on the detected face bounding boxes (i.e. a face detection is considered positive only if the IoU between a detected face bounding box and the ground-truth exceeds 0.5). For AVD, we report DER (diarization error rate): a lower DER value indicates a better AVD performance. For more information, please refer to our technical reports for the challenge.
 
@@ -20,23 +20,23 @@ We want to note that our method has recently won many challenges, including the 
 
 ## Use Cases and Performance
 ### Active Speaker Detection (Dataset: AVA-ActiveSpeaker v1.0)
-|  Model  |      Feature       |     validation mAP (%)     |
-|:--------|:------------------:|:--------------------------:|
-|  SPELL  |  RESNET18-TSM-AUG  |   **94.2** (up from 88.0)  |
-|  SPELL  |  RESNET50-TSM-AUG  |   **94.9** (up from 89.3)  |
+|  Model         |      Feature       |     validation mAP (%)     |
+|:---------------|:------------------:|:--------------------------:|
+|  SPELL (Ours)  |  RESNET18-TSM-AUG  |   **94.2** (up from 88.0)  |
+|  SPELL (Ours)  |  RESNET50-TSM-AUG  |   **94.9** (up from 89.3)  |
 > Numbers in parentheses indicate the mAP scores without using the suggested graph learning method.
 
 ### Action Localization (Dataset: AVA-Actions v2.2)
-|  Model  |         Feature        |     validation mAP (%)     |
-|:--------|:----------------------:|:--------------------------:|
-|  SPELL  |   SLOWFAST-64x2-R101   |   **36.8** (up from 29.4)  |
+|  Model         |         Feature        |     validation mAP (%)     |
+|:---------------|:----------------------:|:--------------------------:|
+|  SPELL (Ours)  |   SLOWFAST-64x2-R101   |   **36.8** (up from 29.4)  |
 > Number in parentheses indicates the mAP score without using the suggested graph learning method.
 
 ### Action Segmentation (Dataset: 50Salads - split2)
-|  Model  |   Feature    |         F1@0.1 (%)        |           Acc (%)         |
-|:--------|:------------:|:-------------------------:|:-------------------------:|
-|  SPELL  |   MSTCN++    |  **84.7** (up from 83.4)  |  **85.0** (up from 84.6)  |
-|  SPELL  |   ASFORMER   |  **89.8** (up from 86.1)  |  **88.2** (up from 87.8)  |
+|  Model         |   Feature    |         F1@0.1 (%)        |           Acc (%)         |
+|:---------------|:------------:|:-------------------------:|:-------------------------:|
+|  SPELL (Ours)  |   MSTCN++    |  **84.7** (up from 83.4)  |  **85.0** (up from 84.6)  |
+|  SPELL (Ours)  |   ASFORMER   |  **89.8** (up from 86.1)  |  **88.2** (up from 87.8)  |
 > Numbers in parentheses indicate the scores without using the suggested graph learning method.
 
 ## Requirements
