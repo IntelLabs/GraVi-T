@@ -16,9 +16,10 @@ def train(cfg):
 
     # Input and output paths
     path_graphs = os.path.join(cfg['root_data'], f'graphs/{cfg["graph_name"]}')
+    path_result = os.path.join(cfg['root_result'], f'{cfg["exp_name"]}')
     if cfg['split'] is not None:
         path_graphs = os.path.join(path_graphs, f'split{cfg["split"]}')
-    path_result = os.path.join(cfg['root_result'], f'{cfg["exp_name"]}')
+        path_result = os.path.join(path_result, f'split{cfg["split"]}')
     os.makedirs(path_result, exist_ok=True)
 
     # Prepare the logger and save the current configuration for future reference

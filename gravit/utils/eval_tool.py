@@ -12,9 +12,12 @@ from collections import defaultdict
 import csv
 import decimal
 import heapq
+import h5py
 from .ava import object_detection_evaluation
 from .ava import standard_fields
-
+from .vs import knapsack
+from scipy import stats
+from scipy.stats import rankdata
 
 def compute_average_precision(precision, recall):
   """Compute Average Precision according to the definition in VOCdevkit.
@@ -396,6 +399,7 @@ def get_eval_score(cfg, preds):
     path_annts = os.path.join(cfg['root_data'], 'annotations')
 
     eval_type = cfg['eval_type']
+    str_score = ""
     if eval_type == 'AVA_ASD':
         groundtruth = os.path.join(path_annts, 'ava_activespeaker_val_v1.0.csv')
         score = run_evaluation_asd(preds, groundtruth)
@@ -434,5 +438,88 @@ def get_eval_score(cfg, preds):
             rec = tp[i] / (tp[i]+fn[i])
             f1 = np.nan_to_num(2*pre*rec / (pre+rec))
             str_score += f', (F1@{th}) {f1*100:.2f}%'
+    elif eval_type == "VS_max" or eval_type == "VS_avg":
 
+        path_dataset = os.path.join(cfg['root_data'], f'annotations/{cfg["dataset"]}/eccv16_dataset_{cfg["dataset"].lower()}_google_pool5.h5')
+        with h5py.File(path_dataset, 'r') as hdf:
+
+            all_f1_scores = []
+            all_taus = []
+            all_rhos = []
+            for video, scores in preds:
+
+                n_samples = hdf.get(video + '/n_steps')[()]
+                n_frames = hdf.get(video + '/n_frames')[()]
+                gt_segments = np.array(hdf.get(video + '/change_points'))
+                gt_samples = np.array(hdf.get(video + '/picks'))
+                gt_scores = np.array(hdf.get(video + '/gtscore'))
+                user_summaries = np.array(hdf.get(video + '/user_summary'))
+
+                # Take scores from sampled frames to all frames
+                gt_samples = np.append(gt_samples, [n_frames - 1]) # To account for last frames within loop
+                frame_scores = np.zeros(n_frames, dtype=np.float32)
+                for idx in range(n_samples):
+                    frame_scores[gt_samples[idx]:gt_samples[idx + 1]] = scores[idx]
+
+                # Calculate segments' avg score and length
+                # (Segment_X = video[frame_A:frame_B])
+                n_segments = len(gt_segments)
+                s_scores = np.empty(n_segments)
+                s_lengths = np.empty(n_segments, dtype=np.int32)
+                for idx in range(n_segments):
+                    s_lengths[idx] = gt_segments[idx][1] - gt_segments[idx][0] + 1
+                    s_scores[idx] = (frame_scores[gt_segments[idx][0]:gt_segments[idx][1]].mean())
+
+                # Select for max importance
+                final_len = int(n_frames * 0.15) # 15% of total length
+                segments = knapsack.fill_knapsack(final_len, s_scores, s_lengths)
+
+                # Mark frames from selected segments
+                sum_segs = np.zeros((len(segments), 2), dtype=int)
+                pred_summary = np.zeros(n_frames, dtype=np.int8)
+                for i, seg in enumerate(segments):
+                    pred_summary[gt_segments[seg][0]:gt_segments[seg][1]] = 1
+                    sum_segs[i][0] = gt_segments[seg][0]
+                    sum_segs[i][1] = gt_segments[seg][1]
+
+                # Calculate F1-Score per user summary
+                user_summary = np.zeros(n_frames, dtype=np.int8)
+                n_user_sums = user_summaries.shape[0]
+                f1_scores = np.empty(n_user_sums)
+
+                for u_sum_idx in range(n_user_sums):
+                    user_summary[:n_frames] = user_summaries[u_sum_idx]
+
+                    # F-1
+                    tp = pred_summary & user_summary
+                    precision = sum(tp)/sum(pred_summary)
+                    recall = sum(tp)/sum(user_summary)
+
+                    if (precision + recall) == 0:
+                        f1_scores[u_sum_idx] = 0
+                    else:
+                        f1_scores[u_sum_idx] = (2 * precision * recall * 100 / (precision + recall))
+
+                # Correlation Metrics
+                pred_imp_score = np.array(scores)
+                ref_imp_scores = gt_scores
+                rho_coeff, _ = stats.spearmanr(pred_imp_score, ref_imp_scores)
+                tau_coeff, _ = stats.kendalltau(rankdata(-pred_imp_score), rankdata(-ref_imp_scores))
+
+                all_taus.append(tau_coeff)
+                all_rhos.append(rho_coeff)
+
+                # Calculate one F1-Score from all user summaries
+                if eval_type == "VS_max":
+                    f1 = max(f1_scores)
+                else:
+                    f1 = np.mean(f1_scores)
+
+                all_f1_scores.append(f1)
+
+        f1_score = sum(all_f1_scores) / len(all_f1_scores)
+        tau = sum(all_taus) / len(all_taus)
+        rho = sum(all_rhos) / len(all_rhos)
+
+        str_score = f"F1-Score = {f1_score}, Tau = {tau}, Rho = {rho}"
     return str_score

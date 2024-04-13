@@ -42,8 +42,8 @@ python tools/train_context_reasoning.py --cfg configs/action-segmentation/50sala
 The results and logs will be saved under `results`.
 
 #### Step 3: Evaluation
-Now, we can evaluate the trained model's performance:
+Now, we can evaluate the trained model's performance. You also need to specify which split to evaluate the experiments on:
 ```
-python tools/evaluate.py --dataset 50salads --exp_name SPELL_AS_default --eval_type AS
+python tools/evaluate.py --dataset 50salads --exp_name SPELL_AS_default --eval_type AS --split 2
 ```
 This will print the evaluation scores.
