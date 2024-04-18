@@ -1,7 +1,7 @@
 # GraVi-T
-This repository contains an open-source codebase for Graph-based long-term Video undersTanding (GraVi-T). It is designed to serve as a spatial-temporal graph learning framework for multiple video understanding tasks. In the current version, it supports training and evaluating one of the state-of-the-art models, [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf), for the tasks of active speaker detection, action localization, and action segmentation.
+This repository contains an open-source codebase for Graph-based long-term Video undersTanding (GraVi-T). It is designed to serve as a spatial-temporal graph learning framework for multiple video understanding tasks. The current version supports training and evaluating two state-of-the-art models: [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf) for the tasks of active speaker detection, action localization, and action segmentation, and [VideoSAGE](https://arxiv.org/abs/2404.10539) for video summarization.
 
-In the near future, we will release more advanced graph-based approaches (e.g. [STHG](https://arxiv.org/abs/2306.10608)) for other tasks, including video summarization and audio-visual diarization.
+In the near future, we will release more advanced graph-based approaches (e.g. [STHG](https://arxiv.org/abs/2306.10608)) for other tasks, including audio-visual diarization.
 
 ![](docs/images/gravit_teaser.jpg?raw=true)
 
@@ -40,10 +40,10 @@ We want to note that our method has recently won many challenges, including the 
 > Numbers in parentheses indicate the scores without using the suggested graph learning method.
 
 ### Video Summarization (Datasets: SumMe & TVSum)
-|  Model         |              Feature              | [Kendall's Tau](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kendalltau.html#scipy.stats.kendalltau)* | [Spearman's Rho](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.spearmanr.html#scipy.stats.spearmanr)* |
-|:---------------|:---------------------------------:|:-------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------:|
-|  SPELL (Ours)  | eccv16_dataset_summe_google_pool5 |                                                  **0.12** (up from 0.09)                                                  |                                                 **0.16** (up from 0.12)                                                  |
-|  SPELL (Ours)  | eccv16_dataset_tvsum_google_pool5 |                                                  **0.30** (up from 0.27)                                                  |                                                 **0.42** (up from 0.39)                                                  |
+|  Model             |              Feature              | [Kendall's Tau](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kendalltau.html#scipy.stats.kendalltau)* | [Spearman's Rho](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.spearmanr.html#scipy.stats.spearmanr)* |
+|:-------------------|:---------------------------------:|:-------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------:|
+|  VideoSAGE (Ours)  | eccv16_dataset_summe_google_pool5 |                                                  **0.12** (up from 0.09)                                                  |                                                 **0.16** (up from 0.12)                                                  |
+|  VideoSAGE (Ours)  | eccv16_dataset_tvsum_google_pool5 |                                                  **0.30** (up from 0.27)                                                  |                                                 **0.42** (up from 0.39)                                                  |
 > Numbers in parentheses indicate the scores without using the suggested graph learning method.\
 >  *Correlation metric between predicted frame importance and ground truth. 
 
@@ -132,10 +132,10 @@ Please refer to the instructions in [GETTING_STARTED_AS.md](docs/GETTING_STARTED
 Please refer to the instructions in [GETTING_STARTED_VS.md](docs/GETTING_STARTED_VS.md).
 
 ## Contributor
-GraVi-T is written and maintained by [Kyle Min](https://github.com/kylemin) (from version 1.0.0 to 1.1.0). Please contact me if you want to become a contributor to this library.
+GraVi-T is written and maintained by [Kyle Min](https://github.com/kylemin) (from version 1.0.0 to 1.1.0) and [Jose Rojas Chaves](https://github.com/joserochh) (version 1.2.0). Please refer to the release notes for details about each version's supported features and applications.
 
 ## Citation
-ECCV 2022 paper:
+ECCV 2022 paper about [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf):
 ```bibtex
 @inproceedings{min2022learning,
   title={Learning Long-Term Spatial-Temporal Graphs for Active Speaker Detection},
@@ -147,7 +147,7 @@ ECCV 2022 paper:
 }
 ```
 
-Technical report for Ego4D challenge 2022:
+Ego4D workshop paper [@ECCV22](https://ego4d-data.org/workshops/eccv22/):
 ```bibtex
 @article{min2022intel,
   title={Intel Labs at Ego4D Challenge 2022: A Better Baseline for Audio-Visual Diarization},
@@ -157,13 +157,23 @@ Technical report for Ego4D challenge 2022:
 }
 ```
 
-Technical report for Ego4D challenge 2023:
+Ego4D workshop paper [@CVPR23](https://ego4d-data.org/workshops/cvpr23/) about [STHG](https://arxiv.org/abs/2306.10608):
 ```bibtex
 @article{min2023sthg,
   title={STHG: Spatial-Temporal Heterogeneous Graph Learning for Advanced Audio-Visual Diarization},
   author={Min, Kyle},
   journal={arXiv preprint arXiv:2306.10608},
   year={2023}
+}
+```
+
+SG2RL workshop paper [@CVPR24](https://sites.google.com/view/sg2rl) about [VideoSAGE](https://arxiv.org/abs/2404.10539):
+```bibtex
+@article{chaves2024videosage,
+  title={VideoSAGE: Video Summarization with Graph Representation Learning},
+  author={Jose M. Rojas Chaves and Subarna Tripathi},
+  journal={arXiv preprint arXiv:2404.10539},
+  year={2024}
 }
 ```
 
