@@ -49,10 +49,10 @@ We want to note that our method has recently won many challenges, including the 
 
 ## Requirements
 Preliminary requirements:
-- Python>=3.7
-- CUDA 11.6
+- Python>=3.9
+- CUDA 12.1
 
-Run the following command if you have CUDA 11.6:
+Run the following command if you have CUDA 12.1:
 ```
 pip3 install -r requirements.txt
 ```
