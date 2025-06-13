@@ -4,7 +4,7 @@ pandas
 scikit-learn
 -f https://download.pytorch.org/whl/cu121/torch_stable.html
 -f https://data.pyg.org/whl/torch-2.5.1+cu121.html
-torch==2.5.1
+torch==2.7.1
 torchvision==0.20.1
 pyg_lib
 torch_scatter
