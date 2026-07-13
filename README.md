@@ -1,3 +1,8 @@
+# THIS PROJECT IS ARCHIVED   
+Intel will not provide or guarantee development of or support for this project, including but not limited to, maintenance, bug fixes, new releases or updates.  
+Patches to this project are no longer accepted by Intel.  
+ If you have an ongoing need to use this project, are interested in independently developing it, or would like to maintain patches for the community, please create your own fork of the project.  
+  
 # GraVi-T
 This repository contains an open-source codebase for Graph-based long-term Video undersTanding (GraVi-T). It is designed to serve as a spatial-temporal graph learning framework for multiple video understanding tasks. The current version supports training and evaluating two state-of-the-art models: [SPELL](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136950367.pdf) for the tasks of active speaker detection, action localization, and action segmentation, and [VideoSAGE](https://arxiv.org/abs/2404.10539) for video summarization.
 
